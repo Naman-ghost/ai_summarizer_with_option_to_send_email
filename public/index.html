@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Notes Summarizer</title>
+  <style>
+    /* General Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f7fa;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    h3 {
+      color: #34495e;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 800px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    input[type="file"],
+    input[type="text"] {
+      font-size: 16px;
+      padding: 8px;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    form, textarea, #manualText, #output {
+      margin-bottom: 20px;
+    }
+
+    hr {
+      margin: 30px 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    #emailStatus {
+      margin-top: 10px;
+      color: green;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Notes Summarizer</h1>
+
+    <!-- Manual Input -->
+    <h3>Type or Paste Notes</h3>
+    <textarea id="manualText" rows="8" placeholder="Paste or type your notes here..."></textarea>
+    <br />
+    <button id="manualSummarize">Summarize Typed Notes</button>
+
+    <hr />
+
+    <!-- File Upload -->
+    <h3>Or Upload a File</h3>
+    <form id="uploadForm">
+      <input type="file" name="file" />
+      <br />
+      <button type="submit">Summarize File</button>
+    </form>
+
+    <hr />
+
+    <!-- Output -->
+    <h3>Summary (Editable):</h3>
+    <textarea id="output" rows="10" placeholder="Summary will appear here..."></textarea>
+
+    <hr />
+
+    <!-- Share via Email -->
+    <h3>Share via Email</h3>
+    <form id="emailForm">
+      <input type="text" id="recipients" placeholder="Enter recipient emails (comma separated)" />
+      <br />
+      <button type="submit">Send Email</button>
+    </form>
+    <p id="emailStatus"></p>
+  </div>
+
+  <script>
+    let latestSummary = "";
+
+    // Summarize Manual Text
+    document.getElementById("manualSummarize").addEventListener("click", async () => {
+      const text = document.getElementById("manualText").value.trim();
+      if (!text) {
+        alert("Please enter some text!");
+        return;
+      }
+
+      const res = await fetch("/summarize-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      const data = await res.json();
+      latestSummary = data.summary || data.error;
+      document.getElementById("output").value = latestSummary;
+    });
+
+    // Summarize File
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const file = e.target.file.files[0];
+      if (!file) {
+        alert("Please select a file!");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/summarize", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      latestSummary = data.summary || data.error;
+      document.getElementById("output").value = latestSummary;
+    });
+
+    // Handle Email Sharing
+    document.getElementById("emailForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const editedSummary = document.getElementById("output").value;
+      if (!editedSummary.trim()) {
+        alert("Please generate or edit a summary first!");
+        return;
+      }
+
+      const recipients = document.getElementById("recipients").value;
+
+      const res = await fetch("/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recipients, content: editedSummary }),
+      });
+
+      const data = await res.json();
+      document.getElementById("emailStatus").innerText =
+        data.message || data.error;
+    });
+  </script>
+</body>
+</html>
