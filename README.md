@@ -1,56 +1,136 @@
-# AI Notes Summarizer with Email Sharing
+# 📚 AI Notes Summarizer with Email Sharing
 
-A simple web app to summarize notes (typed manually or uploaded as files) and send the summary via email using Brevo SMTP. Built with **Node.js**, **Express**, and a **Hugging Face summarization model**. 🔗 **Live Demo:** [AI Notes Summarizer](https://ai-notes-summarizer-ivbt4tww1-naman-singhs-projects-e343687b.vercel.app/)
+> Summarize your notes (typed or uploaded) and send them via email using Brevo SMTP. Built with Node.js + Express + Hugging Face BART Large CNN.
 
-## Features
-- **Manual Input:** Type or paste notes and summarize instantly.
-- **File Upload:** Upload `.txt` files to summarize automatically.
-- **Email Sharing:** Send the generated summary to any verified email address via Brevo SMTP.
-- **Editable Summary:** The summary displayed is editable before sending.
+![Node.js](https://img.shields.io/badge/Backend-Node.js-green) ![Express](https://img.shields.io/badge/Framework-Express-blue) ![HTML](https://img.shields.io/badge/Frontend-HTML/CSS-yellow) ![Hugging Face](https://img.shields.io/badge/AI-HuggingFace-orange) ![Vercel](https://img.shields.io/badge/Deployment-Vercel-purple)
 
-## Tech Stack
-- **Frontend:** HTML, CSS, JavaScript  
-- **Backend:** Node.js, Express  
-- **APIs:** Hugging Face (BART Large CNN), Brevo (Sendinblue)  
-- **Deployment:** Vercel
+---
 
-## Setup Instructions
-1. **Clone the repo**  
-   ```bash
-   git clone https://github.com/Naman-ghost/ai_summarizer_with_option_to_send_email.git
-   cd ai_summarizer_with_option_to_send_email
-Install dependencies
+## 🚀 Overview
 
-bash
-Copy
-Edit
+AI Notes Summarizer allows users to:  
+- Enter notes manually or upload `.txt` files.  
+- Generate automatic summaries using Hugging Face BART Large CNN.  
+- Edit the summary if needed before sending.  
+- Share the summary via email using Brevo SMTP.  
+- Access a minimal, clean frontend with HTML + JS.
+
+🔗 **Live Demo:** [AI Notes Summarizer](https://ai-notes-summarizer-ivbt4tww1-naman-singhs-projects-e343687b.vercel.app/)
+
+---
+
+## 🗂️ Project Structure
+
+```
+ai_summarizer_with_option_to_send_email/
+├── server.js                 # Node.js + Express backend
+├── public/
+│   └── index.html            # Frontend HTML + JS
+├── package.json              # Dependencies
+├── package-lock.json
+├── README.md                 # This file
+└── .env.example              # Example env template (no secrets)
+```
+
+---
+
+## 🔧 Setup Instructions
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/Naman-ghost/ai_summarizer_with_option_to_send_email.git
+cd ai_summarizer_with_option_to_send_email
+```
+
+### 2. Install dependencies
+
+```bash
 npm install
-Create a .env file in the root:
+```
 
-env
-Copy
-Edit
+### 3. Create a `.env` file in the root
+
+```env
 HF_API_KEY=your_huggingface_token
 BREVO_API_KEY=your_brevo_api_key
 BREVO_SENDER_EMAIL=your_verified_email
-Run locally
+PORT=5000
+```
 
-bash
-Copy
-Edit
+> **Note:** Never commit your real `.env` file. Use `.env.example` as a reference.
+
+### 4. Run locally
+
+```bash
 npm start
-Visit http://localhost:5000 to test manually.
+```
 
-Deployment
-The backend and frontend are deployed together on Vercel: Live Demo
+Visit [http://localhost:5000](http://localhost:5000) in your browser.
 
-Author
-Naman Singh – GitHub
+---
 
-pgsql
-Copy
-Edit
+## ▶️ Deployment
 
-You can copy the whole content above into a `README.md` file in your repo.  
+The backend and frontend are deployed together on **Vercel**:  
+[Live Demo](https://ai-notes-summarizer-ivbt4tww1-naman-singhs-projects-e343687b.vercel.app/)
 
-If you want, I can also create a **single `.env.example`** template for GitHub so you
+---
+
+## 📤 Supported File Types
+
+- `.txt` (plain text)  
+
+Uploaded files are converted to text and summarized automatically.
+
+---
+
+## 🌐 API Endpoints
+
+| Route             | Method | Description                                 |
+|------------------|--------|---------------------------------------------|
+| `/summarize`      | POST   | Upload a `.txt` file to summarize           |
+| `/summarize-text` | POST   | Send text manually for summarization        |
+| `/send-email`     | POST   | Send the generated summary via Brevo SMTP   |
+
+---
+
+## 🖼️ Frontend Preview
+
+Minimal, clean interface to:  
+- Type notes  
+- Upload `.txt` files  
+- Edit summaries  
+- Send via email  
+
+Built with plain **HTML + CSS + JS** (no React).
+
+---
+
+## ✅ Example Usage
+
+- Type meeting notes and click "Summarize".  
+- Upload lecture notes `.txt` and get an automatic summary.  
+- Edit the summary and send to your verified email.
+
+---
+
+## ✨ Credits
+
+- **Summarization Model:** [Hugging Face BART Large CNN](https://huggingface.co/facebook/bart-large-cnn)  
+- **Email Service:** [Brevo (Sendinblue)](https://www.brevo.com/)  
+- **Built by:** [@Naman-ghost](https://github.com/Naman-ghost)  
+
+---
+
+## 📌 To Do
+
+- [ ] Support `.pdf` and `.docx` uploads  
+- [ ] Add multi-language support  
+- [ ] Add download summary option
+
+---
+
+## 📜 License
+
+MIT
